@@ -1,6 +1,7 @@
-% main
-clear; clc; close all 
+%% main
+clear; clc; close all
 disp('start GMRES.');
+
 % Ax = b
 A = pascal(4);  % A is a pascal matrix.
 b = [0 0 0 0]';
@@ -36,4 +37,12 @@ y2 = BackwardUpperTriangular( Rm,gm );% solve backward
 % x = x0 + V * y
 realSolution = inv(A)*b;
 solution1 = x0+Vm*y1;
-solution2 = x0+V(:,1:4)*y2
+solution2 = x0+Vm*y2;
+
+%% test part
+clear; clc; close all
+A = [1,1,1;0,1,1;0,0,1];
+b = [4,2,1];
+x = zeros(3,1);
+[x] = BackwardUpperTriangular(A,b);
+
