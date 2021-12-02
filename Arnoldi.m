@@ -1,15 +1,16 @@
 % Arnoldi process
-function [V,H] = Arnoldi(A,b,x0,restartm)
+function [Vm,Hm_bar] = Arnoldi(A,b,x0,restart_m)
 % Input: restartm is the restart parameter
     
-    [m, ~] = size(A);
-    R = Inf(m,m);
-    H = zeros(m+1,m);V = zeros(m,m+1);%A*V=V*H
+    [size_of_A, ~] = size(A);
+    R = Inf(size_of_A,size_of_A);
+    H = zeros(size_of_A+1,size_of_A);V = zeros(size_of_A,size_of_A+1);%A*V=V*H
     
-    % V1 = r0./norm(r0)
+    % v1 = r0./norm(r0)
     r0 = b-A*x0;
-    V(:,1) = r0./norm(r0);
-    for j = 1:restartm
+    beta = norm(r0);
+    V(:,1) = r0./beta;
+    for j = 1:restart_m
         R(:,j) = A*V(:,j);
         for i = 1:j
             H(i,j) = R(:,j)'*V(:,i);
@@ -23,8 +24,8 @@ function [V,H] = Arnoldi(A,b,x0,restartm)
             V(:,j+1) = R(:,j)./H(j+1,j);
         end
     end
-    
-    H = H(1:j+1,1:j);
-    V = V(:,1:j);
+    % resize H to Hm_bar and V to Vm.
+    Hm_bar = H(1:j+1,1:j);
+    Vm = V(:,1:j);
 end
 

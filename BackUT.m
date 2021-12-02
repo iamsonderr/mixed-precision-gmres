@@ -1,4 +1,4 @@
-function x = BackUT( A,b )
+function x = BackwardUpperTriangular( A,b )
 %backward:   ?????????
 % ??Ax=b
     [~,c] = size(A);

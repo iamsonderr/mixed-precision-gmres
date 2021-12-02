@@ -1,17 +1,15 @@
 % main
 clear; clc; close all 
-
+disp('start GMRES.');
 % Ax = b
 A = pascal(4);  % A is a pascal matrix.
 b = [0 0 0 0]';
 x0 = [1 0 0 0]';    % x0 is the initial sovler vector for Ax = b.
-m = 4;
+restart_m = 4;
 
 % Arnoldi iterative process.
-% It generates V which is a orthonormal base /
-% for krylov subspace with rows the same as rows of x0 and m+1 columns /
-% and H which is a upper hessenberg matrix with m+1 rows and m columns.
-[V,H] = Arnoldi(A,b,x0,m);
+% Input: restart_m is the restart parameter
+[Vm,Hm_bar] = Arnoldi(A,b,x0,restart_m);
 
 % Givens rotation to hessenberg matrix and /
 % beta * e1 from Arnoldi process, making /
@@ -24,14 +22,18 @@ m = 4;
 %               to beta * e1
 r0 = b-A*x0;
 beta = norm(r0);
-[~,real_m] = size(H);
-beta_multiply_e1 = zeros(realm+1,1);beta_multiply_e1(1) = beta;
-[T,gm] = Givens( H,beta_multiply_e1 )
+[~,real_m] = size(Hm_bar);
+beta_e1 = zeros(real_m+1,1);beta_e1(1) = beta;
+[Rm_bar,gm_bar] = Givens( Hm_bar,beta_e1 );
+%Resize Rm_bar and gm_bar
+Rm = Rm_bar(1:real_m,1:real_m);
+gm = gm_bar(1:real_m);
 
 % y is the shift from the initial x0.
-y1 = inv(T)*bk
-%y2 = BackUT( T,bk )
+y1 = inv(Rm)*gm;% solve directly
+y2 = BackwardUpperTriangular( Rm,gm );% solve backward
+
 % x = x0 + V * y
-realSolution = inv(A)*b
-sol1 = x0+V*y1
-%sol2 = x0+V(:,1:4)*y2
+realSolution = inv(A)*b;
+solution1 = x0+Vm*y1;
+solution2 = x0+V(:,1:4)*y2
