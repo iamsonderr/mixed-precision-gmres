@@ -4,7 +4,7 @@ disp('start GMRES.');
 
 matrices_loader_from_mat_file
 
-A = matrix_apache2.Problem.A;
+A = matrix('494.bus').Problem.A;
 b = zeros(size(A,1),1);
 x0 = zeros(size(A,1),1);
 x0(1) = 1;
@@ -22,7 +22,7 @@ while true
     [~,real_m] = size(Hm_bar);
     beta_e1 = zeros(real_m+1,1);beta_e1(1) = beta;
     [Rm_bar,gm_bar] = Givens( Hm_bar,beta_e1 );
-    %Resize Rm_bar and gm_bar
+    % resize Rm_bar and gm_bar
     Rm = Rm_bar(1:real_m,1:real_m);
     gm = gm_bar(1:real_m);
 
@@ -44,7 +44,8 @@ while true
     x0 = xm;
 end
 %% test part
-clear; clc; close all;
-apache2 = load('apache2.mat');
-x = apache2.Problem.A(1,1);
-whos x
+clear; clc; close all
+
+file_folder_with_specific_filetype = fullfile('./matrix_collection/','*.mat');% the 1st parameter is file folder name and the 2nd parameter is specific filetype.
+structure_of_matching_file_information = dir(file_folder_with_specific_filetype);% read matching file information from choosen file folder with specific filetype.
+matching_file_names = {structure_of_matching_file_information.name}% {} is used to generate a cell i.e. yuanzu in chinese.
