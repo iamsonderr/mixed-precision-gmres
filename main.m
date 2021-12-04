@@ -2,17 +2,7 @@
 clear; clc; close all
 disp('start GMRES.');
 
-% Ax = b
-% A = pascal(4);  % A is a pascal matrix.
-% b = [0 0 0 0]';
-% x0 = [1 0 0 0]';    % x0 is the initial sovler vector for Ax = b.
-% restart_m = 4;
-
-% Ax = b
-% A = [1,2,3,4;5,6,7,8;9,10,11,12;13,14,15,16];  % A is a pascal matrix.
-% b = [10 26 42 58]';
-% x0 = [1 0 0 0]';    % x0 is the initial sovler vector for Ax = b.
-% restart_m = 4;
+matrices_loader_from_mat_file.m
 
 A = sprandsym(10,0.7);
 b = [0 0 0 0 0 0 0 0 0 0]';
@@ -54,9 +44,7 @@ while true
     x0 = xm;
 end
 %% test part
-clear; clc; close all
-A = [1,1,1;0,1,1;0,0,1];
-b = [4,2,1];
-x = zeros(3,1);
-[x] = BackwardUpperTriangular(A,b);
-
+clear; clc; close all;
+apache2 = load('apache2.mat');
+x = apache2.Problem.A(1,1);
+whos x
