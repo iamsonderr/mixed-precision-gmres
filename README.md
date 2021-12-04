@@ -1,6 +1,6 @@
-# purpose of repo
+# Purpose of repo
 This repo is used for implementation of mixed-precision GMRES.
-# language of implementation
+# Language of implementation
 - matlab
 - C
 
@@ -8,3 +8,4 @@ This repo is used for implementation of mixed-precision GMRES.
 
 - [ ] add  preconditioner, include jacobi preconditioner and ILU(0) preconditioner
 - [ ] add performance analysis
+- [ ] import sparse matices in CSR format for testing
