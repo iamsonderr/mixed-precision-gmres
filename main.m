@@ -2,12 +2,13 @@
 clear; clc; close all
 disp('start GMRES.');
 
-matrices_loader_from_mat_file.m
+matrices_loader_from_mat_file
 
-A = sprandsym(10,0.7);
-b = [0 0 0 0 0 0 0 0 0 0]';
-x0 = [1 0 0 0 0 0 0 0 0 0]';
-restart_m = 10;
+A = matrix_apache2.Problem.A;
+b = zeros(size(A,1),1);
+x0 = zeros(size(A,1),1);
+x0(1) = 1;
+restart_m = 100;
 tol = 1e-6;% specified accuracy radio 
 
 while true
@@ -33,7 +34,6 @@ while true
     % real_solution = inv(A)*b;
     % xm = x0+Vm*ym;
     xm = x0+Vm*ym;
-    xm
     % judge whether to restart
     rm = norm(b-A*xm);
     if rm/beta <= tol
