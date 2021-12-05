@@ -1,5 +1,5 @@
-function [inner_iteration_counts,execution_time] = GmresUnpreconditionedDouble(A,b,x0,restart_m,tol)
-    disp('start unpreconditioned double GMRES.');
+function [inner_iteration_counts,execution_time] = GmresUnpreconditionedSingle(A,b,x0,restart_m,tol)
+    disp('start unpreconditioned GMRES in single precision.');
 
     inner_iteration_counts = 0;
     tic;% starting point for execution time
