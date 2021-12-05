@@ -1,5 +1,3 @@
-clear; clc; close all
-
 file_folder_name = './matrix_collection/';
 specific_filetype = '*.mat';
 file_folder_with_specific_filetype = fullfile(file_folder_name,specific_filetype);% generate a cell in which only 1 string exists.
@@ -17,7 +15,7 @@ for i = 1:row
 
 end
 
-matrix('apache2').Problem.A
+% matrix('apache2').Problem.A
 
 % Ax = b
 % A = pascal(4);  % A is a pascal matrix.

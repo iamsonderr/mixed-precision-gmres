@@ -1,18 +1,25 @@
-%% main
 clear; clc; close all
-disp('start GMRES.');
-
+% include file
 matrices_loader_from_mat_file
 
-A = matrix('494.bus').Problem.A;
+
+disp('start GMRES.');
+
+matrix = load('./matrix_collection/ns3Da.mat');
+
+% A = matrix('ns3Da').Problem.A;
+A = matrix.Problem.A;
 b = zeros(size(A,1),1);
 x0 = zeros(size(A,1),1);
 x0(1) = 1;
 restart_m = 100;
-tol = 1e-6;% specified accuracy radio 
+tol = 1e-10;% specified accuracy radio 
+
+inner_iteration_count = 0;
 
 while true
-
+    
+    
     % Arnoldi iterative process.
     % Input: restart_m is the restart parameter
     [Vm,Hm_bar] = Arnoldi(A,b,x0,restart_m);
@@ -36,7 +43,7 @@ while true
     xm = x0+Vm*ym;
     % judge whether to restart
     rm = norm(b-A*xm);
-    if rm/beta <= tol
+    if rm <= tol% condition of convergence
         break;
     end
     
@@ -46,6 +53,6 @@ end
 %% test part
 clear; clc; close all
 
-file_folder_with_specific_filetype = fullfile('./matrix_collection/','*.mat');% the 1st parameter is file folder name and the 2nd parameter is specific filetype.
-structure_of_matching_file_information = dir(file_folder_with_specific_filetype);% read matching file information from choosen file folder with specific filetype.
-matching_file_names = {structure_of_matching_file_information.name}% {} is used to generate a cell i.e. yuanzu in chinese.
+m = matfile('./matrix_collection/494_bus.mat');
+m1 = m.Problem
+m1.A
