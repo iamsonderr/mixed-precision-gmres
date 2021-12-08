@@ -1,1 +1,0 @@
-function [inner_iteration_counts,execution_time] = GmresUnpreconditionedDouble(A,b,x0,restart_m,tol)
