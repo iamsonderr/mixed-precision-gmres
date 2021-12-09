@@ -7,7 +7,7 @@ using namespace std;
 int main()
 {
 	// matrix load from .mtx
-	std::ifstream file("ns3Da.mtx");
+	std::ifstream file("./matrix_collection/494_bus.mtx");
 	int num_row, num_col, num_lines;
 	
 	// Ignore comments headers
