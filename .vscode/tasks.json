@@ -9,7 +9,7 @@
                 "-I",
                 "D:\\software",
                 "-g",
-                "${file}","${fileDirname}\\gmres_unpreconditioned_double.cpp", //add all needed .cpp file here. It likes makefile.
+                "${file}","${fileDirname}\\gmres_unpreconditioned_in_double.cpp","${fileDirname}\\gmres_unpreconditioned_in_mixed_precision.cpp","${fileDirname}\\gmres_unpreconditioned_in_float.cpp", //add all needed .cpp file here. It likes makefile.
                 "-o",
                 "${fileDirname}\\${fileBasenameNoExtension}.exe"
             ],

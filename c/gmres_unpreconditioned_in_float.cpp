@@ -1,34 +1,36 @@
 #include "gmres.h"
 
-int GmresUnpreconditionedDouble(const MatrixXd *A, const VectorXd *b, const VectorXd *x0, 
-								const int restart_m, const double tol,
-								VectorXd *xm)
+int GmresUnpreconditionedInFloat(const MatrixXf *A, const VectorXf *b, const VectorXf *x0, 
+								const int restart_m, const float tol,
+								VectorXf *xm, int &inner_iteration_counts)
 {
-	int inner_iteration_counts = 0;
+	inner_iteration_counts = 0;
 	int row_A = (*A).rows();
-	VectorXd R(restart_m);
-	MatrixXd H = MatrixXd::Zero(restart_m + 1, restart_m);
-	MatrixXd V = MatrixXd::Zero(row_A, restart_m + 1);
-	MatrixXd Hm_bar;
-	MatrixXd Vm;
-	MatrixXd G;
-	MatrixXd Rm;
-	MatrixXd gm;
+	
+	MatrixXf H = MatrixXf::Zero(restart_m + 1, restart_m);
+	MatrixXf V = MatrixXf::Zero(row_A, restart_m + 1);
+	MatrixXf Hm_bar;
+	MatrixXf Vm;
+	MatrixXf G;
+	MatrixXf Rm;
+	MatrixXf gm;
 
-	VectorXd r0;
-	VectorXd beta_e1;
-	VectorXd ym;
-	VectorXd rm;
+	VectorXf R(restart_m);
+	VectorXf r0;
+	VectorXf beta_e1;
+	VectorXf um;
+	VectorXf ym;
+	VectorXf rm; 
 
-	double beta = 0;
-	double down = 0.0, c = 0.0, s = 0.0;
+	float beta = 0;// beta is stored in float precision.
+	float down = 0.0, c = 0.0, s = 0.0;// down, c, s are all stored in float precision.
 	int real_m = 0;
 	int j = 0, i = 0, k = 0;
 	int Rm_size = 0;
 	while (1)
 	{
 		// Arnoldi Process
-		r0 = (*b) - (*A) * (*x0);
+		r0 = (*b) - (*A) * (*x0);// calculate in double precision.
 		beta = r0.norm();
 		V.col(0) = r0 / beta;
 		for (j = 0; j < restart_m; j++)
@@ -60,11 +62,10 @@ int GmresUnpreconditionedDouble(const MatrixXd *A, const VectorXd *b, const Vect
 
 		//Givens Rotation
 		real_m = Hm_bar.cols();
-		beta_e1 = VectorXd::Zero(real_m + 1); beta_e1(0) = beta;
-		//cout << beta_e1 << endl; cout << endl;
+		beta_e1 = VectorXf::Zero(real_m + 1); beta_e1(0) = beta; // beta is in float precision.
 		for (k = 0; k < real_m; k++)
 		{
-			G = MatrixXd::Identity(real_m + 1, real_m + 1);
+			G = MatrixXf::Identity(real_m + 1, real_m + 1);
 			// double sqrt(double), otherwise float sqrtf(float)
 			down = sqrt((Hm_bar(k, k) * Hm_bar(k, k) + Hm_bar(k + 1, k) * Hm_bar(k + 1, k)));
 			s = Hm_bar(k + 1, k) / down;
@@ -80,7 +81,7 @@ int GmresUnpreconditionedDouble(const MatrixXd *A, const VectorXd *b, const Vect
 		gm = beta_e1.head(real_m);
 		// BackwardUpperTriangular Process, Rm*ym = gm;
 		Rm_size = Rm.cols();
-		ym = VectorXd::Zero(Rm_size);
+		ym = VectorXf::Zero(Rm_size);
 		ym(ym.size() - 1) = gm(gm.size() - 1) / Rm(Rm_size - 1, Rm_size - 1);
 		for (k = Rm_size - 2; k > -1; k--)
 		{
@@ -88,23 +89,15 @@ int GmresUnpreconditionedDouble(const MatrixXd *A, const VectorXd *b, const Vect
 		}
 
 
-
-
-		// x = x0 + V * y
-		// real_solution = inv(A) * b;
 		// xm = x0 + Vm * ym;
-		(*xm) = (*x0) + Vm * ym;
-		//cout << Vm << endl; cout << endl;
-		//cout << Rm << endl; cout << endl;
-		//cout << gm << endl; cout << endl;
-		//cout << ym << endl; cout << endl;
+		um = Vm * ym;
+		(*xm) = (*x0) + um;
+		
 
 		// judge whether to restart
 		rm = (*b) - (*A) * (*xm);
-		//cout << rm.norm() << endl;
 		if (rm.norm() <= tol)
 		{
-			//cout << "xm =\n" << xm << endl;
 			break;
 		}
 			
@@ -112,6 +105,6 @@ int GmresUnpreconditionedDouble(const MatrixXd *A, const VectorXd *b, const Vect
 		
 	}
 	
-	return inner_iteration_counts;
+	return 0;
 
 }
